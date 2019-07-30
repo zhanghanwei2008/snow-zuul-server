@@ -1,0 +1,57 @@
+	node ("master")
+	{
+	 def repoUrl = 'https://github.com/zhanghanwei2008/snow-eureka-server'
+		def repoBranch = 'dev'
+		def gitDir = ''
+		def workspace = ''
+	 
+		// docker镜像信息
+		def imageName = "192.168.31.107:5000/snow-eureka-server"
+		def imageTag = "dev"
+	 
+		// rancher1.X部署所需变量
+		def rancher1Url = 'https://<rancher1_service>/v2-beta'  // rancher1.X地址 
+		def rancher1Env = ''  // rancher1.X需部署服务所在环境的ID
+		def rancher1Service = '<stack>/<service>'   // rancher1.X需部署服务的 栈/服务名
+	 
+		// rancher2.X部署所需变量
+		def rancher2Url = "https://<rancher2_service>/v3/project/<cluster_id>:<project_id>" // rancher2.X地址+project
+		def rancher2Namespace = ""  // rancher2.X需部署服务的命名空间
+		def rancher2Service = "bookkeeper"  // rancher2.X需部署服务的服务名
+	 
+		def recipients = ''    // 收件人
+		def jenkinsHost = ''    // jenkins服务器地址
+	 
+		// 认证ID
+		def gitCredentialsId = 'aa651463-c335-4488-8ff0-b82b87e11c59'
+		def settingsConfigId = '3ae4512e-8380-4044-9039-2b60631210fe'
+		def rancherAPIKey = 'd41150be-4032-4a53-be12-3024c6eb4204'
+		def soundsId = '69c344f1-8b11-47a1-a3b6-dfa423b94d78'
+	 
+		// 工具配置
+		def mvnHome = 'mvn'
+	 
+		//env.SONAR_HOME = "${tool 'sonarscanner'}"
+		//env.PATH="${env.SONAR_HOME}/bin:${env.PATH}"
+	
+		
+		stage('docker'){
+		 echo 'deploy';
+		 dir("${workspace}"){ 
+        		 sh """
+					docker-compose down  
+					docker-compose rm    
+			        docker  pull   ${imageName}:${imageTag} 
+ 
+					
+					docker-compose up -d
+					
+					
+				"""
+
+
+					//docker rmi ${imageName}:${imageTag}
+				}
+		}
+		
+	}
